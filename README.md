@@ -73,9 +73,9 @@ We provide several pre-trained weights:
 
 | dataset  | weight | config | 
 | --- | --- | --- |
-|PU-GAN |  todo| [here](https://github.com/EasyRy/test_kpu/blob/main/cfgs/upsampling/pugan_args.py)|
-|PU-1K | [Google Drive](https://drive.google.com/drive/folders/1IPQJdiwGMSympYFqrnRIhFVTh096vEQc?usp=drive_link)| [here](https://github.com/EasyRy/test_kpu/blob/main/cfgs/upsampling/pu1k_args.py)|
-|PU-GAN * |  [Google Drive](https://drive.google.com/drive/folders/1ovbv8edja9o8900bQtb2Md7jEXt4LorL?usp=drive_link)| [here](https://github.com/EasyRy/test_kpu/blob/main/cfgs/upsampling/pugan_paper_args.py)|
+|PU-GAN |  todo| [here](https://github.com/EasyRy/RepKPU/blob/main/cfgs/upsampling/pugan_args.py)|
+|PU-1K | [Google Drive](https://drive.google.com/drive/folders/1IPQJdiwGMSympYFqrnRIhFVTh096vEQc?usp=drive_link)| [here](https://github.com/EasyRy/RepKPU/blob/main/cfgs/upsampling/pu1k_args.py)|
+|PU-GAN * |  [Google Drive](https://drive.google.com/drive/folders/1ovbv8edja9o8900bQtb2Md7jEXt4LorL?usp=drive_link)| [here](https://github.com/EasyRy/RepKPU/blob/main/cfgs/upsampling/pugan_paper_args.py)|
 
 \* indicates the origin model used in our paper
 
