@@ -34,7 +34,6 @@ def parse_pugan_o_args():
     parser.add_argument('--encoder_dim', default=64, type=int, help='input(output) feature dimension in each dense block')
     parser.add_argument('--out_dim', default=128, type=int, help='input(output) feature dimension in each dense block')
     parser.add_argument('--encoder_bn', default=True, type=str2bool, help='whether use batch normalization in encoder')
-    # parser.add_argument('--global_mlp', default=True, type=str2bool, help='whether use global_mlp in encoder')
     #  kernel points
     # kernel_radius = kernel_point_receptive_radius * 1.5
     # conv_radius  = kernel_point_receptive_radius * 4
@@ -50,7 +49,6 @@ def parse_pugan_o_args():
     parser.add_argument('--rigid_scale', default=0.625, type=float, help='radius of kernel point sphere')
     parser.add_argument('--query_scale', default=1.0, type=float, help='radius of kernel point sphere')
     parser.add_argument('--up_rate', default=4, type=int, help='number of kernel points in kernel point queries')
-
     # cross-attention
     parser.add_argument('--head_num', default=4, type=int, help='head number of attention')
     parser.add_argument('--trans_num', default=2, type=int, help='number of attention blocks')
@@ -60,7 +58,7 @@ def parse_pugan_o_args():
     
     
     # ouput
-    parser.add_argument('--out_path', default='./output/pugan', type=str, help='the checkpoint and log save path')
+    parser.add_argument('--out_path', default='./output/pugan_o', type=str, help='the checkpoint and log save path')
     
     # test
     parser.add_argument('--patch_rate', default=3, type=int, help='used for patch generation')
@@ -70,7 +68,7 @@ def parse_pugan_o_args():
     parser.add_argument('--input_dir', default='./data/PU-GAN/test_pointcloud/input_2048_4X/input_2048/', type=str, help='path to folder of input point clouds')
     parser.add_argument('--gt_dir', default='./data/PU-GAN/test_pointcloud/input_2048_4X/gt_8192/', type=str, help='path to folder of gt point clouds')
     parser.add_argument('--save_dir', default='./result', type=str, help='save upsampled point cloud and results')
-    parser.add_argument('--ckpt', default='./pretrain/pugan_best.pth', type=str, help='checkpoints')
+    parser.add_argument('--ckpt', default='./pretrain/pugan_best_o.pth', type=str, help='checkpoints')
     
     args = parser.parse_args()
 
