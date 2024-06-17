@@ -465,3 +465,76 @@ class Decoder(nn.Module):
         return new_pos, reg_loss1 + reg_loss0 + reg_loss2
 
 
+# Decoder simple
+class MHA_o(nn.Module):
+    def __init__(self, cfgs):
+        super().__init__()
+        self.dim = cfgs.trans_dim
+        self.h = cfgs.head_num
+        self.num_kernel_points = cfgs.num_kernel_points
+        self.r = cfgs.up_rate
+        self.conv_querys = nn.Conv2d(self.dim, self.dim, 1)
+        self.conv_keys = nn.Conv2d(self.dim, self.dim, 1)
+        self.conv_values = nn.Conv2d(self.dim, self.dim, 1)
+        self.ffn = nn.Sequential(
+            nn.Conv2d(self.dim, self.dim*2, 1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(self.dim*2, self.dim, 1),
+        )
+        self.attn_conv = nn.Conv2d(self.dim, self.dim, 1)
+        self.ffn_act = nn.ReLU(inplace=True)
+
+    def forward(self, querys, feats):
+        B, _, N, __ = feats.shape
+        querys_iden = querys
+        querys = self.conv_querys(querys).view(B, self.h, self.dim//self.h, N, -1).permute(0, 3, 1, 4, 2).contiguous() # (B, n, h, r, d//h)
+        keys = self.conv_keys(feats).view(B, self.h, self.dim//self.h, N, -1).permute(0, 3, 1, 2, 4).contiguous() # (B, n, h, d//h, nkp)
+        values = self.conv_values(feats).view(B, self.h, self.dim//self.h, N, -1).permute(0, 3, 1, 4, 2).contiguous() # (B, n, h, nkp, d//h) 
+
+        logits = torch.matmul(querys, keys) * ((self.dim // self.h)**(-0.5)) # (B, n, h, r, nkp) 
+        soft_logits = torch.softmax(logits, dim=-1)
+        agg_feats = torch.matmul(soft_logits, values).permute(0, 1, 2, 4, 3).contiguous().view(B, N, -1, self.r) # (B, n, d, r) 
+        agg_feats = agg_feats.permute(0,2,1,3).contiguous()# (B, n, d, r)
+        agg_feats = self.attn_conv(agg_feats) + querys_iden# (B, d, N, r) 
+        agg_feats = self.ffn_act(self.ffn(agg_feats) + agg_feats)
+        return agg_feats
+
+
+class Decoder_s(nn.Module):
+    def __init__(self, cfgs):
+        super().__init__()
+        self.r = cfgs.up_rate
+        self.disp_dim = cfgs.trans_dim
+        self.dim = cfgs.out_dim
+        self.rem = REM(cfgs, is_deform = True, need_repkpoints = True)
+        self.kgm = KGM(cfgs)
+        self.projector = nn.Conv2d(cfgs.trans_dim, cfgs.trans_dim, 1)
+        self.attns = nn.ModuleList()
+        for i in range(cfgs.trans_num):
+            self.attns.append(MHA_o(cfgs))
+        self.skip_mlp = nn.Sequential(
+            nn.Conv1d(cfgs.out_dim + cfgs.trans_dim, cfgs.trans_dim, 1),
+            nn.ReLU(inplace=True),
+            nn.Conv1d(cfgs.trans_dim, cfgs.trans_dim, 1),
+            nn.ReLU(inplace=True)
+        )
+        self.disp_mlp = nn.Sequential(
+            nn.Conv1d(cfgs.trans_dim, 64, 1),  
+            nn.ReLU(inplace = True),
+            nn.Conv1d(64, 3, 1)
+        )
+        
+    def forward(self, pos, feat):
+        B, _, N = pos.shape
+        local_feat, RepKPoints, reg_loss = self.rem(pos, feat)
+        KPQueries = self.kgm(pos, local_feat)
+        qs = self.projector(KPQueries[1])
+        ks = self.projector(RepKPoints[1])
+        for m in self.attns:
+            qs = m(qs, ks)
+        disp_feat = qs.view(B, self.disp_dim, -1) # b, d, n * r
+        disp_feat = self.skip_mlp(torch.cat([disp_feat, feat.unsqueeze(-1).repeat(1,1,1,self.r).view(B, self.dim, -1)], dim=1))
+        disp = torch.tanh(self.disp_mlp(disp_feat))
+        new_pos = pos.unsqueeze(-1).repeat(1,1,1,self.r).view(B, 3, -1) + disp # b, 3, n*r
+
+        return new_pos, reg_loss
