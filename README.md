@@ -107,3 +107,14 @@ python surf_recon.py --file_path xxx.xyz --save_path xxx.obj
 * [Here](https://drive.google.com/drive/folders/1F62lEPTdMkv99v_1NAD78xvvIVzVhhg5?usp=drive_link), we provide an example point cloud and reconstructed result.
 ## Acknowledgements
 This repo is heavily based on [KPConv](https://github.com/HuguesTHOMAS/KPConv-PyTorch), [Grad-PU](https://github.com/yunhe20/Grad-PU/), [PU-GCN](https://github.com/guochengqian/PU-GCN), [PU-GAN](https://github.com/liruihui/PU-GAN). Thanks for their great work!
+
+## Citation
+```
+@inproceedings{rong2024repkpu,
+  title={RepKPU: Point Cloud Upsampling with Kernel Point Representation and Deformation},
+  author={Rong, Yi and Zhou, Haoran and Xia, Kang and Mei, Cheng and Wang, Jiahao and Lu, Tong},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={21050--21060},
+  year={2024}
+}
+```
