@@ -1,8 +1,6 @@
 <div align='center'>
-
 <h1>(CVPR'24) Point Cloud Upsampling with Kernel Point Representation and Deformation</h1>
 </div>
-
 
 ##  Installation 
 Step1. Install requirements:
@@ -100,7 +98,10 @@ python test.py --dataset pugan --input_dir ./data/PU-GAN/test/pugan_4x/input --g
 ```
 * You can use our code to get CD value. To calculate HD and P2F value, please refer to [here](https://github.com/guochengqian/PU-GCN). 
 
-
-
+#### Surface example:
+```
+python surf_recon.py --file_path xxx.xyz --save_path xxx.obj
+```
+* [Here](https://drive.google.com/drive/folders/1F62lEPTdMkv99v_1NAD78xvvIVzVhhg5?usp=drive_link), we provide an example point cloud and reconstructed result.
 ## Acknowledgements
 This repo is heavily based on [KPConv](https://github.com/HuguesTHOMAS/KPConv-PyTorch), [Grad-PU](https://github.com/yunhe20/Grad-PU/), [PU-GCN](https://github.com/guochengqian/PU-GCN), [PU-GAN](https://github.com/liruihui/PU-GAN). Thanks for their great work!
