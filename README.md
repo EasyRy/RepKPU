@@ -3,7 +3,6 @@
 <h1>(CVPR'24) Point Cloud Upsampling with Kernel Point Representation and Deformation</h1>
 </div>
 
-## under construction!
 
 ##  Installation 
 Step1. Install requirements:
@@ -37,6 +36,7 @@ Datasets can be download from here:
 
 
 * We provide a pre-processed PU-GAN testing set with multiple resolutions of GT point clouds.
+* If you want to generate testing point clouds from mesh files by youself, please refer to [here](https://github.com/yunhe20/Grad-PU).
 
 After data preparation, the overall directory structure should be:
 ```
@@ -73,8 +73,8 @@ We provide several pre-trained weights:
 
 | dataset  | weight | config | 
 | --- | --- | --- |
-|PU-GAN |  todo| [here](https://github.com/EasyRy/RepKPU/blob/main/cfgs/upsampling/pugan_args.py)|
-|PU-1K | [Google Drive](https://drive.google.com/drive/folders/1IPQJdiwGMSympYFqrnRIhFVTh096vEQc?usp=drive_link)| [here](https://github.com/EasyRy/RepKPU/blob/main/cfgs/upsampling/pu1k_args.py)|
+|PU-GAN |  [Google Drive](https://drive.google.com/drive/folders/1Iv2pPePqDXRSiDalrFiDDtJ4WiseCdhZ?usp=drive_link)| [here](https://github.com/EasyRy/RepKPU/blob/main/cfgs/upsampling/pugan_args.py)|
+|PU1K | [Google Drive](https://drive.google.com/drive/folders/1IPQJdiwGMSympYFqrnRIhFVTh096vEQc?usp=drive_link)| [here](https://github.com/EasyRy/RepKPU/blob/main/cfgs/upsampling/pu1k_args.py)|
 |PU-GAN * |  [Google Drive](https://drive.google.com/drive/folders/1ovbv8edja9o8900bQtb2Md7jEXt4LorL?usp=drive_link)| [here](https://github.com/EasyRy/RepKPU/blob/main/cfgs/upsampling/pugan_paper_args.py)|
 
 \* indicates the origin model used in our paper
@@ -87,12 +87,13 @@ python test.py --dataset pugan --input_dir ./data/PU-GAN/test/pugan_4x/input --g
 # 16X upsampling on PU-GAN dataset
 python test.py --dataset pugan --input_dir ./data/PU-GAN/test/pugan_16x/input --gt_dir ./data/PU-GAN/test/pugan_16x/gt --ckpt ./pretrain/pugan_best.pth  --r 16 --save_dir ./result/pugan_16x
 
-# arbitrary-scale upsampling on PU-GAN dataset, take 19x for example
-python test.py --dataset pugan --input_dir ./data/PU-GAN/test/arbitrary_scale/input --gt_dir ./data/PU-GAN/test/arbitrary_scale/19x/gt --ckpt ./pretrain/pugan_best.pth  --r 19 --save_dir ./result/pugan_19x --flexible
-
-# 4X upsampling on PU-1K dataset
+# 4X upsampling on PU1K dataset
 python test.py --dataset pu1k --input_dir ./data/PU1K/test/input_2048/input_2048/ --gt_dir ./data/PU1K/test/input_2048/gt_8192/ --ckpt ./pretrain/pu1k_best.pth  --r 4 --save_dir ./result/pu1k_4x
+
+# arbitrary-scale upsampling on PU-GAN dataset, take 19x for example
+python test.py --dataset pugan --input_dir ./data/PU-GAN/test/arbitrary_scale/19x/input --gt_dir ./data/PU-GAN/test/arbitrary_scale/19x/gt --ckpt ./pretrain/pugan_best.pth  --r 19 --save_dir ./result/pugan_19x --flexible
 ```
+* Don't miss "--flexible" for arbitrary-scale upsampling.
 * If you want to use our original model, please use "--o", like:
 ```
 python test.py --dataset pugan --input_dir ./data/PU-GAN/test/pugan_4x/input --gt_dir ./data/PU-GAN/test/pugan_4x/gt --ckpt ./pretrain/pugan_o_best.pth  --r 4 --save_dir ./result/pugan_4x --o
