@@ -130,8 +130,6 @@ def test_flexible(model, args):
             if pcd_upsampled.shape[-1] > target_num:
                 pcd_upsampled = pcd_upsampled[:, :, (pcd_upsampled.shape[-1]-target_num):]
 
-            print(pcd_upsampled.shape, gt.shape)
-            
             saved_pcd = rearrange(pcd_upsampled.squeeze(0), 'c n -> n c').contiguous()
             saved_pcd = saved_pcd.detach().cpu().numpy()
             save_folder = os.path.join(args.save_dir, 'xyz')
