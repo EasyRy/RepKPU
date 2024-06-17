@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from models.decoder import Decoder, Decoder_o
+from models.decoder import Decoder, Decoder_o, Decoder_s
 from models.encoder import PointTransformer, PointTransformer_o
 
 
@@ -8,7 +8,7 @@ class RepKPU(nn.Module):
     def __init__(self, cfgs):
         super().__init__()
         self.encoder = PointTransformer(cfgs)
-        self.decoder = Decoder(cfgs)
+        self.decoder = Decoder_s(cfgs) if cfgs.simple else Decoder(cfgs)
     
     def forward(self, pos):
         feat = self.encoder(pos)
@@ -44,31 +44,3 @@ class RepKPU_o(nn.Module):
         upsampled_xyz = xyz_repeat + offset
         return upsampled_xyz, reg_loss
 
-
-
-"""
-class RepKPU(nn.Module):
-    def __init__(self, cfgs):
-        super().__init__()
-        self.encoder = PointTransformer2(cfgs)
-        ra = 2
-        self.r = 4
-        dim = 32
-        self.neck = KernelQueryKernel(conv_radius=2.5*ra, kernel_radius=1.5*ra, kernel_point_receptive_radius=ra, num_kernel_points=15, up_factor=4)
-        self.offset_mlp = nn.Sequential(
-            nn.Conv1d(dim, dim//2, 1),
-            nn.ReLU(inplace=True),
-            nn.Conv1d(dim//2, 3, 1)
-        )
-
-    
-    def forward(self, pos):
-        B, _, N = pos.shape
-        feat = self.encoder(pos)
-        disp_feat, rep_loss = self.neck(pos, feat)
-        offset = torch.tanh(self.offset_mlp(disp_feat))
-        xyz_repeat = pos.unsqueeze(-1).repeat(1,1,1,self.r).view(B, 3, -1) # (b, 3, n*r)
-        upsampled_xyz = xyz_repeat + offset
-        return upsampled_xyz, None
-
-"""
