@@ -100,7 +100,7 @@ python test.py --dataset pugan --input_dir ./data/PU-GAN/test/pugan_4x/input --g
 ```
 * You can use our code to get CD value. To calculate HD and P2F value, please refer to [here](https://github.com/guochengqian/PU-GCN). 
 
-#### Surface example:
+#### Surface reconstruction:
 ```
 python surf_recon.py --file_path xxx.xyz --save_path xxx.obj
 ```
