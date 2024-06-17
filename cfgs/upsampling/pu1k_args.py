@@ -21,9 +21,7 @@ def parse_pu1k_args():
 
     # dataset
     parser.add_argument('--dataset', default='pu1k', type=str, help='pu1k or pugan')
-    
     parser.add_argument('--h5_file_path', default="./data/PU1K/train/pu1k_poisson_256_poisson_1024_pc_2500_patch50_addpugan.h5", type=str, help='the path of train dataset')
-    
     parser.add_argument('--num_points', default=256, type=int, help='the points number of each input patch')
     parser.add_argument('--skip_rate', default=1, type=int, help='used for dataset')
     parser.add_argument('--use_random_input', default=False, type=str2bool, help='whether use random sampling for input generation')
@@ -34,7 +32,6 @@ def parse_pu1k_args():
     # encoder
     parser.add_argument('--k', default=16, type=int, help='neighbor number in encoder')
     parser.add_argument('--encoder_dim', default=32, type=int, help='input(output) feature dimension in each dense block')
-    # parser.add_argument('--feat_dim', default=48, type=int, help='input(output) feature dimension in each dense block')
     parser.add_argument('--out_dim', default=64, type=int, help='input(output) feature dimension in each dense block')
     parser.add_argument('--encoder_bn', default=False, type=str2bool, help='whether use batch normalization in encoder')
     parser.add_argument('--global_mlp', default=True, type=str2bool, help='whether use global_mlp in encoder')
@@ -53,7 +50,7 @@ def parse_pu1k_args():
     parser.add_argument('--rigid_scale', default=0.625, type=float, help='radius of kernel point sphere')
     parser.add_argument('--query_scale', default=1.0, type=float, help='radius of kernel point sphere')
     parser.add_argument('--up_rate', default=4, type=int, help='upsampling rate')
-
+    parser.add_argument('--simple', default=False, type=str2bool, help='whether use simple decoder')
     # cross-attention
     parser.add_argument('--head_num', default=4, type=int, help='head number of attention')
     parser.add_argument('--trans_num', default=3, type=int, help='number of attention blocks')
@@ -68,7 +65,7 @@ def parse_pu1k_args():
     # test
     parser.add_argument('--patch_rate', default=3, type=int, help='used for patch generation')
     parser.add_argument('--r', default=4, type=int, help='upsampling rate')
-    parser.add_argument('--o', action='store_true', help='using original model')
+    parser.add_argument('--o', action='store_true', help='whether use original model')
     parser.add_argument('--flexible', action='store_true', help='aribitrary scale?')
     parser.add_argument('--input_dir', default='./data/PU1K/test/input_2048/input_2048/', type=str, help='path to folder of input point clouds')
     parser.add_argument('--gt_dir', default='./data/PU1K/test/input_2048/gt_8192/', type=str, help='path to folder of gt point clouds')
