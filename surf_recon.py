@@ -9,9 +9,9 @@ def surface_reconstrcution_bpa(args):
     f = np.max(np.sqrt(np.sum((a - cp.reshape(1, 3))**2, axis=1)))
     pcd.points = o3d.utility.Vector3dVector((a-cp)/f)
     pcd.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.01, max_nn=25))
-    # use light_matrix to orient normals
-    light_matrix = np.asarray([1, 1, -1])
-    pcd.orient_normals_towards_camera_location(light_matrix)
+    # use camera_matrix to orient normals
+    camera_matrix = np.asarray([1, 1, -1])
+    pcd.orient_normals_towards_camera_location(camera_matrix)
     scale = 1.0 
     radii = [0.005*scale, 0.01*scale, 0.02*scale, 0.04*scale]
     rec_mesh = o3d.geometry.TriangleMesh.create_from_point_cloud_ball_pivoting(pcd, o3d.utility.DoubleVector(radii))
