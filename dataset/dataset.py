@@ -22,9 +22,10 @@ class PUDataset(data.Dataset):
         if self.args.use_random_input:
             sample_idx = nonuniform_sampling(input.shape[0], sample_num=self.args.num_points)
             input = input[sample_idx, :]
-            input = jitter_perturbation_point_cloud(input, sigma=self.args.jitter_sigma, clip=self.args.jitter_max)
         # data augmentation
         if self.args.data_augmentation:
+            if self.args.dataset == 'pugan':
+                input = jitter_perturbation_point_cloud(input, sigma=self.args.jitter_sigma, clip=self.args.jitter_max) 
             input, gt = rotate_point_cloud_and_gt(input, gt)
             input, gt, scale = random_scale_point_cloud_and_gt(input, gt, scale_low=0.8, scale_high=1.2)
             radius = radius * scale
